@@ -36,9 +36,7 @@
     pointer-events: none;
     transition: opacity 0.2s;
   }
-  .haiku-overlay.visible {
-    opacity: 1;
-  }
+  .haiku-overlay.visible { opacity: 1; }
 
   .haiku-card {
     position: relative;
@@ -86,9 +84,7 @@
     box-shadow: 0 0 0 4px rgba(0,168,107,0.15);
     overflow: hidden;
   }
-  .haiku-avatar img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
+  .haiku-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
   .haiku-content {
     flex: 1;
@@ -129,6 +125,7 @@
     letter-spacing: 0.5px;
   }
   .haiku-platform svg { width: 10px; height: 10px; }
+  .haiku-platform.hidden { display: none; }
 
   .haiku-line {
     width: 24px;
@@ -149,31 +146,39 @@
   }
 
   @keyframes haikuEnter {
-    0% {
-      opacity: 0;
-      transform: translateX(-30px);
-      filter: blur(6px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-      filter: blur(0);
-    }
+    0% { opacity: 0; transform: translateX(-30px); filter: blur(6px); }
+    100% { opacity: 1; transform: translateX(0); filter: blur(0); }
   }
 
   .haiku-overlay.exiting .haiku-card {
     animation: haikuExit 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
   }
   @keyframes haikuExit {
-    to {
-      opacity: 0;
-      transform: translateX(-20px);
-      filter: blur(4px);
-    }
+    to { opacity: 0; transform: translateX(-20px); filter: blur(4px); }
   }
+
+  /* Debug overlay (solo si ?debug=1) */
+  .debug {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.85);
+    color: #00A86B;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #00A86B;
+    z-index: 9999;
+    max-width: 400px;
+    word-break: break-all;
+  }
+  .debug.hidden { display: none; }
 </style>
 </head>
 <body>
+
+<div class="debug hidden" id="debug">Iniciando…</div>
 
 <div class="haiku-overlay" id="overlay">
   <div class="haiku-card" id="card">
@@ -181,7 +186,7 @@
     <div class="haiku-content">
       <div class="haiku-meta">
         <span class="haiku-name" id="name"></span>
-        <span class="haiku-platform" id="platform"></span>
+        <span class="haiku-platform hidden" id="platform"></span>
       </div>
       <div class="haiku-line"></div>
       <p class="haiku-message" id="message"></p>
@@ -189,96 +194,168 @@
   </div>
 </div>
 
-<script src="https://socialstream.ninja/socialstream.js"></script>
 <script>
-  // Iconos SVG por plataforma
+  // ============================================================
+  // HAIKU OVERLAY — Conexión a Social Stream Ninja
+  // ============================================================
+
   const PLATFORM_ICONS = {
     youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2c-.3-1-1.1-1.8-2.1-2.1C19.6 3.6 12 3.6 12 3.6s-7.6 0-9.4.5c-1 .3-1.8 1.1-2.1 2.1C0 8 0 12 0 12s0 4 .5 5.8c.3 1 1.1 1.8 2.1 2.1 1.8.5 9.4.5 9.4.5s7.6 0 9.4-.5c1-.3 1.8-1.1 2.1-2.1.5-1.8.5-5.8.5-5.8s0-4-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>',
     instagram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.69-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95C23.73 2.69 21.3.27 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-11.85a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>',
     twitch: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z"/></svg>',
     tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43V8.66a8.16 8.16 0 004.77 1.52V6.73a4.85 4.85 0 01-1.84-.04z"/></svg>',
-    facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>',
-    default: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>'
+    facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.79-4.7 4.54-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>'
   };
-
   const PLATFORM_NAMES = {
     youtube: 'YouTube',
     instagram: 'Instagram',
     twitch: 'Twitch',
     tiktok: 'TikTok',
-    facebook: 'Facebook',
-    default: 'Chat'
+    facebook: 'Facebook'
   };
 
+  // --- Parámetros de la URL ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const sessionId = urlParams.get('session') || urlParams.get('s') || '';
+  const isDebug = urlParams.has('debug');
+  const autoHideSeconds = parseInt(urlParams.get('hide') || '0', 10); // 0 = no auto-hide
+
+  // --- DOM refs ---
   const overlay = document.getElementById('overlay');
   const card = document.getElementById('card');
   const nameEl = document.getElementById('name');
   const avatarEl = document.getElementById('avatar');
   const msgEl = document.getElementById('message');
   const platformEl = document.getElementById('platform');
+  const debugEl = document.getElementById('debug');
 
+  if (isDebug) debugEl.classList.remove('hidden');
+
+  function log(msg) {
+    console.log('[Haiku]', msg);
+    if (isDebug) {
+      debugEl.textContent = msg;
+    }
+  }
+
+  // --- Render del mensaje ---
   let hideTimer = null;
 
   function renderMessage(data) {
     const name = (data.chatname || data.name || 'Anónimo').toString();
     const text = (data.chatmessage || data.message || '').toString();
-    const platform = (data.type || data.platform || 'default').toString().toLowerCase();
+    const platformKey = (data.type || '').toString().toLowerCase();
     const avatarUrl = data.chatimg || data.avatar || null;
 
-    // Limpiar timer previo
-    if (hideTimer) clearTimeout(hideTimer);
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
 
     nameEl.textContent = name;
-    msgEl.innerHTML = text; // SSN ya sanitiza; permite emojis
+    msgEl.innerHTML = text;
 
-    const platformKey = PLATFORM_ICONS[platform] ? platform : 'default';
-    platformEl.innerHTML = PLATFORM_ICONS[platformKey] + ' ' + PLATFORM_NAMES[platformKey];
+    if (PLATFORM_ICONS[platformKey]) {
+      platformEl.innerHTML = PLATFORM_ICONS[platformKey] + ' ' + PLATFORM_NAMES[platformKey];
+      platformEl.classList.remove('hidden');
+    } else {
+      platformEl.classList.add('hidden');
+    }
 
     if (avatarUrl) {
-      avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" onerror="this.parentElement.innerHTML='${name.charAt(0).toUpperCase()}'">`;
+      const safeInitial = name.charAt(0).toUpperCase();
+      avatarEl.innerHTML = '<img src="' + avatarUrl + '" alt="" onerror="this.parentElement.innerHTML=\'' + safeInitial + '\'">';
     } else {
       avatarEl.textContent = name.charAt(0).toUpperCase();
     }
 
-    // Re-disparar animación
     overlay.classList.remove('exiting');
     overlay.classList.remove('visible');
-    void card.offsetWidth; // reflow
+    void card.offsetWidth;
     overlay.classList.add('visible');
+
+    log('Mensaje mostrado: ' + name);
+
+    if (autoHideSeconds > 0) {
+      hideTimer = setTimeout(hideMessage, autoHideSeconds * 1000);
+    }
   }
 
   function hideMessage() {
     overlay.classList.add('exiting');
-    hideTimer = setTimeout(() => {
+    setTimeout(() => {
       overlay.classList.remove('visible');
       overlay.classList.remove('exiting');
     }, 400);
+    log('Mensaje oculto');
   }
 
-  // Hook SSN: cuando SSN selecciona/destaca un mensaje, llama a esta función
-  if (typeof window !== 'undefined') {
-    window.featuredchat = function(data) {
-      if (!data || (!data.chatmessage && !data.message)) {
-        hideMessage();
-        return;
-      }
-      renderMessage(data);
+  // --- Conexión WebSocket a SSN ---
+  let socket = null;
+  let reconnectTimer = null;
+
+  function connect() {
+    if (!sessionId) {
+      log('ERROR: falta ?session=XXX en la URL');
+      return;
+    }
+
+    log('Conectando a SSN…');
+    try {
+      socket = new WebSocket('wss://io.socialstream.ninja');
+    } catch (e) {
+      log('Error al crear WebSocket: ' + e.message);
+      scheduleReconnect();
+      return;
+    }
+
+    socket.onopen = function() {
+      log('Conectado. Sala: ' + sessionId);
+      // Únete a la sala. out:2 = canal featured, in:2 = recibir featured
+      socket.send(JSON.stringify({ join: sessionId, out: 2, in: 2 }));
     };
 
-    // Compatibilidad con otros nombres que SSN puede usar
-    window.printChat = window.featuredchat;
-    window.featured = window.featuredchat;
+    socket.onmessage = function(event) {
+      try {
+        const payload = JSON.parse(event.data);
+        log('Recibido: ' + JSON.stringify(payload).slice(0, 100));
+
+        // Estructura típica: { content: {chatmessage, chatname, ...} } o directo
+        const content = payload.content || payload.contents || payload;
+
+        if (!content) return;
+
+        // Si es señal de limpiar (mensaje vacío)
+        if (content === null || (typeof content === 'object' && !content.chatmessage && !content.message)) {
+          hideMessage();
+          return;
+        }
+
+        if (content.chatmessage || content.message) {
+          renderMessage(content);
+        }
+      } catch (e) {
+        log('Error parseando: ' + e.message);
+      }
+    };
+
+    socket.onclose = function() {
+      log('Desconectado. Reconectando…');
+      scheduleReconnect();
+    };
+
+    socket.onerror = function(e) {
+      log('Error WS: ' + (e.message || 'desconocido'));
+    };
   }
 
-  // Si SSN inyecta vía postMessage
-  window.addEventListener('message', (event) => {
-    const data = event.data;
-    if (!data || typeof data !== 'object') return;
-    if (data.action === 'featured' || data.featured === true) {
-      if (data.chatmessage || data.message) renderMessage(data);
-      else hideMessage();
-    }
-  });
+  function scheduleReconnect() {
+    if (reconnectTimer) return;
+    reconnectTimer = setTimeout(() => {
+      reconnectTimer = null;
+      connect();
+    }, 3000);
+  }
+
+  // Iniciar
+  connect();
 </script>
 </body>
 </html>
