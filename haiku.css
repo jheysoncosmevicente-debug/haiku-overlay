@@ -1,7 +1,7 @@
 /* ============================================================
-   HAIKU OVERLAY — v2 editorial
+   HAIKU OVERLAY — v3 editorial + rounded
    Referencias: impeccable.style + haiku-builders.com
-   Filosofía: "decir mucho con poco" — calmado, hairlines, mucho aire
+   Filosofía: "decir mucho con poco" — calmado, generoso, redondeado
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
@@ -15,23 +15,26 @@
   --hk-gris:     rgba(245, 247, 242, 0.55);
   --hk-hairline: rgba(245, 247, 242, 0.10);
 
-  /* Variables SSN */
+  /* Variables SSN — desactivar defaults */
   --comment-color: var(--hk-hueso);
   --comment-bg-color: transparent;
+  --comment-border-radius: 0;
+  --comment-padding: 0;
   --comment-font-size: 20px;
   --comment-font-weight: 500;
-  --comment-padding: 0;
   --author-color: var(--hk-hueso);
   --author-bg-color: transparent;
   --author-font-size: 11px;
   --author-font-weight: 600;
+  --author-border-radius: 0;
+  --rounded-border-radius: 0;
   --font-family: 'Inter', 'DM Sans', sans-serif;
 }
 
 body { background-color: transparent !important; }
 
 /* ============================================================
-   CONTENEDOR
+   CONTENEDOR EXTERNO
    ============================================================ */
 #output {
   margin: 0 0 0 56px !important;
@@ -40,30 +43,49 @@ body { background-color: transparent !important; }
 }
 
 /* ============================================================
-   TARJETA DEL MENSAJE
-   Estética editorial: matte, hairline, sin halo dramático
+   TARJETA — usamos .hl-c-cont como el CARD VISIBLE
+   .hl-message dentro queda transparente
    ============================================================ */
 .hl-c-cont.highlight-chat,
 .highlighted-comment {
   position: relative !important;
-  background: rgba(10, 10, 10, 0.88) !important;
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border-radius: 2px !important;
+  background: rgba(10, 10, 10, 0.92) !important;
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  border-radius: 20px !important;
   border: 1px solid var(--hk-hairline) !important;
-  border-left: 2px solid var(--hk-verde) !important;
   max-width: 720px !important;
-  padding: 22px 28px 22px 88px !important;
+  min-height: 90px !important;
+  padding: 22px 28px 22px 96px !important;
+  margin-top: 14px !important;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45) !important;
   animation: haikuEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: visible !important;
   font-family: 'Inter', 'DM Sans', sans-serif !important;
 }
 
+/* Línea estructural verde en el lado izquierdo (acento interno) */
+.hl-c-cont.highlight-chat::before,
+.highlighted-comment::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  background: var(--hk-verde);
+  border-radius: 2px;
+  opacity: 0.45;
+}
+
 /* ============================================================
-   NOMBRE — Inter 600, uppercase, tracking generoso, mark "→"
+   NOMBRE — forzar dentro del card, con mark editorial
+   SSN lo pone absolute top:-20px; lo regresamos a static
    ============================================================ */
 .hl-name {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
   font-family: 'Inter', sans-serif !important;
   font-weight: 600 !important;
   font-size: 10.5px !important;
@@ -71,13 +93,17 @@ body { background-color: transparent !important; }
   text-transform: uppercase !important;
   letter-spacing: 2.4px !important;
   background: transparent !important;
-  padding: 0 0 6px 0 !important;
+  padding: 0 !important;
   margin: 0 0 10px 0 !important;
   border-radius: 0 !important;
   border-bottom: 1px solid var(--hk-hairline) !important;
+  padding-bottom: 8px !important;
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
+  white-space: normal !important;
+  transform: none !important;
+  z-index: 2 !important;
 }
 
 /* Marca editorial "→" antes del nombre, en verde */
@@ -92,9 +118,10 @@ body { background-color: transparent !important; }
 }
 
 /* ============================================================
-   MENSAJE — DM Sans medium, lectura cómoda
+   MENSAJE — transparente, dentro del card
    ============================================================ */
 .hl-message {
+  position: static !important;
   font-family: 'DM Sans', 'Inter', sans-serif !important;
   font-weight: 500 !important;
   font-style: normal !important;
@@ -103,25 +130,31 @@ body { background-color: transparent !important; }
   color: var(--hk-hueso) !important;
   letter-spacing: -0.15px !important;
   background: transparent !important;
+  background-color: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;
   word-wrap: break-word;
 }
 
 /* ============================================================
-   AVATAR — circular, hairline sutil, sin halo
+   AVATAR — circular, dentro del card, hairline sutil
    ============================================================ */
 .hl-img {
-  width: 48px !important;
-  height: 48px !important;
+  width: 52px !important;
+  height: 52px !important;
   position: absolute !important;
-  left: 24px !important;
-  top: 24px !important;
+  left: 28px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
   border-radius: 50% !important;
   border: 1px solid var(--hk-hairline) !important;
-  box-shadow: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
   background: linear-gradient(135deg, var(--hk-azul), var(--hk-verde-dim)) !important;
   overflow: hidden !important;
+  z-index: 3 !important;
 }
 
 .hl-profile-pic {
@@ -144,31 +177,29 @@ body { background-color: transparent !important; }
 
 .sourcetype {
   position: absolute !important;
-  bottom: -5px !important;
-  left: 52px !important;
+  bottom: 6px !important;
+  left: 64px !important;
   top: auto !important;
-  width: 20px !important;
-  height: 20px !important;
-  max-width: 20px !important;
-  max-height: 20px !important;
+  width: 22px !important;
+  height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
   border-radius: 50% !important;
   background: var(--hk-negro) !important;
-  padding: 3px !important;
+  padding: 4px !important;
   border: 1px solid var(--hk-hairline) !important;
-  z-index: 4 !important;
+  z-index: 5 !important;
 }
 
 /* ============================================================
-   VARIANTE — donación / superchat / membresía
-   Acento verde más presente, prefijo "MEMBER" o "DONO"
+   VARIANTE — donación / superchat
    ============================================================ */
-.hl-c-cont.dono {
-  border-left: 2px solid var(--hk-verde) !important;
-  background: rgba(10, 10, 10, 0.92) !important;
+.hl-c-cont.dono::before {
+  background: var(--hk-verde);
+  opacity: 0.9;
+  width: 3px;
 }
-.hl-c-cont.dono .hl-name {
-  color: var(--hk-verde) !important;
-}
+.hl-c-cont.dono .hl-name { color: var(--hk-verde) !important; }
 .hl-c-cont.dono .hl-name::before {
   content: "◆";
   font-size: 9px;
@@ -178,38 +209,41 @@ body { background-color: transparent !important; }
    SIN AVATAR — padding ajustado
    ============================================================ */
 .hl-c-cont.no-avatar {
-  padding: 22px 28px 22px 24px !important;
+  padding: 22px 28px 22px 32px !important;
+}
+.hl-c-cont.no-avatar::before {
+  left: 18px;
 }
 
 /* ============================================================
-   ANIMACIONES — sutiles, cinematográficas
+   ANIMACIONES
    ============================================================ */
 @keyframes haikuEnter {
   0% {
     opacity: 0;
-    transform: translateX(-24px);
+    transform: translateX(-24px) scale(0.98);
     filter: blur(6px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
     filter: blur(0);
   }
 }
 
 .fade {
-  animation: haikuExit 0.45s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation: haikuExit 0.5s cubic-bezier(0.4, 0, 1, 1) forwards !important;
 }
 @keyframes haikuExit {
   to {
     opacity: 0;
-    transform: translateX(-12px);
-    filter: blur(4px);
+    transform: translateX(-16px) scale(0.98);
+    filter: blur(5px);
   }
 }
 
 .dropout {
-  transform: translateX(-100vw) !important;
+  transform: translateX(-100vw) scale(0.96) !important;
   opacity: 0 !important;
   filter: blur(4px) !important;
   transition:
@@ -228,7 +262,7 @@ body { background-color: transparent !important; }
 }
 
 /* ============================================================
-   EMOJIS — alineados al texto
+   EMOJIS
    ============================================================ */
 .hl-message img.emoji,
 .hl-message .emoji {
