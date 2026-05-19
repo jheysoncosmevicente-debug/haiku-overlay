@@ -308,28 +308,39 @@
 
     socket.onopen = function() {
       log('Conectado. Sala: ' + sessionId);
-      // Únete a la sala. out:2 = canal featured, in:2 = recibir featured
-      socket.send(JSON.stringify({ join: sessionId, out: 2, in: 2 }));
+      // out:3 in:2 = mismo canal que featured.html oficial
+      socket.send(JSON.stringify({ join: sessionId, out: 3, in: 2 }));
     };
 
     socket.onmessage = function(event) {
       try {
-        const payload = JSON.parse(event.data);
-        log('Recibido: ' + JSON.stringify(payload).slice(0, 100));
+        let data = (typeof event.data === 'object') ? event.data : JSON.parse(event.data);
+        log('Recibido: ' + JSON.stringify(data).slice(0, 120));
 
-        // Estructura típica: { content: {chatmessage, chatname, ...} } o directo
-        const content = payload.content || payload.contents || payload;
+        if (data && 'overlayNinja' in data) data = data.overlayNinja;
 
-        if (!content) return;
+        // data === false → limpiar
+        if (data === false) { hideMessage(); return; }
+        if (!data) return;
 
-        // Si es señal de limpiar (mensaje vacío)
-        if (content === null || (typeof content === 'object' && !content.chatmessage && !content.message)) {
-          hideMessage();
-          return;
+        let contents = null;
+
+        if ('content' in data) {
+          contents = data.content || false;
+        } else if (data.action === 'content' && 'value' in data) {
+          try {
+            const parsed = data.value ? JSON.parse(data.value) : false;
+            contents = (parsed && 'chatmessage' in parsed) ? parsed : false;
+          } catch (_) { contents = false; }
+        } else if (!('action' in data) && 'chatmessage' in data) {
+          contents = data;
+        } else if ('contents' in data) {
+          contents = data.contents;
         }
 
-        if (content.chatmessage || content.message) {
-          renderMessage(content);
+        if (contents === false || contents === null) { hideMessage(); return; }
+        if (contents && (contents.chatmessage || contents.message)) {
+          renderMessage(contents);
         }
       } catch (e) {
         log('Error parseando: ' + e.message);
