@@ -1,0 +1,213 @@
+/* ============================================================
+   HAIKU OVERLAY — CSS custom para SSN featured.html
+   Aplica identidad Haiku al overlay oficial de Social Stream Ninja
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Paleta Haiku */
+  --hk-verde: #00A86B;
+  --hk-azul:  #014751;
+  --hk-negro: #000000;
+  --hk-hueso: #F5F7F2;
+
+  /* Overrides de variables SSN */
+  --comment-color: var(--hk-hueso);
+  --comment-bg-color: rgba(0, 0, 0, 0.92);
+  --comment-border-radius: 0 18px 18px 0;
+  --comment-font-size: 22px;
+  --comment-font-weight: 500;
+  --comment-padding: 24px 32px 24px 100px;
+  --comment-width: auto;
+  --comment-area-bottom: 60px;
+
+  --author-color: var(--hk-verde);
+  --author-bg-color: transparent;
+  --author-avatar-border-color: var(--hk-verde);
+  --author-avatar-border-size: 2px;
+  --author-avatar-size: 56px;
+  --author-font-size: 14px;
+  --author-font-weight: 700;
+  --author-left: 24px;
+  --author-border-radius: 0;
+
+  --font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  background-color: transparent !important;
+}
+
+/* Contenedor general */
+#output {
+  margin: 0 0 0 60px !important;
+  bottom: 60px !important;
+}
+
+/* Tarjeta del mensaje destacado */
+.hl-c-cont.highlight-chat,
+.highlighted-comment {
+  position: relative !important;
+  background: rgba(0, 0, 0, 0.92) !important;
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  border-radius: 0 18px 18px 0 !important;
+  max-width: 760px !important;
+  padding: 24px 32px 24px 100px !important;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(245, 247, 242, 0.04) inset !important;
+  animation: haikuEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: visible !important;
+}
+
+/* Línea estructural verde (homenaje al haiku) */
+.hl-c-cont.highlight-chat::before,
+.highlighted-comment::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: var(--hk-verde);
+  box-shadow: 0 0 24px rgba(0, 168, 107, 0.5);
+}
+
+/* Nombre del usuario — Poppins bold uppercase verde */
+.hl-name {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  color: var(--hk-verde) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.8px !important;
+  background: transparent !important;
+  padding: 0 0 8px 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Pequeña línea horizontal verde debajo del nombre */
+.hl-name::after {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--hk-verde);
+  opacity: 0.6;
+  margin-left: 6px;
+}
+
+/* Mensaje */
+.hl-message {
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 22px !important;
+  line-height: 1.45 !important;
+  color: var(--hk-hueso) !important;
+  letter-spacing: -0.1px !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  word-wrap: break-word;
+}
+
+/* Avatar circular con anillo verde + halo */
+.hl-img,
+.hl-profile-pic {
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+.hl-img {
+  width: 56px !important;
+  height: 56px !important;
+  position: absolute !important;
+  left: 24px !important;
+  top: 24px !important;
+  border: 2px solid var(--hk-verde) !important;
+  box-shadow: 0 0 0 4px rgba(0, 168, 107, 0.15) !important;
+  background: linear-gradient(135deg, var(--hk-azul), var(--hk-verde)) !important;
+}
+
+.hl-profile-pic {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Badges */
+.hl-badges {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+.hl-badge {
+  height: 14px !important;
+  width: auto !important;
+}
+
+/* Icono de plataforma (YouTube, Twitch, IG…) — pill con borde verde */
+.sourcetype {
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 56px !important;
+  top: auto !important;
+  width: 22px !important;
+  height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  border-radius: 50% !important;
+  background: var(--hk-negro) !important;
+  padding: 3px !important;
+  border: 1.5px solid var(--hk-verde) !important;
+  z-index: 4 !important;
+}
+
+/* Donaciones / superchats — variante destacada */
+.hl-c-cont.dono::before {
+  background: linear-gradient(180deg, var(--hk-verde), var(--hk-azul));
+  width: 7px;
+}
+.hl-c-cont.dono .hl-name {
+  color: var(--hk-verde) !important;
+}
+
+/* Animación de entrada cinematográfica */
+@keyframes haikuEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+/* Override de animaciones por defecto */
+.fade { animation: haikuExit 0.5s cubic-bezier(0.4, 0, 1, 1) forwards !important; }
+@keyframes haikuExit {
+  to { opacity: 0; transform: translateX(-20px); filter: blur(4px); }
+}
+
+.dropout {
+  transform: translateX(-100vw) !important;
+  opacity: 0 !important;
+  filter: blur(6px) !important;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 1, 1), opacity 0.5s, filter 0.5s !important;
+}
+
+/* Sin avatar — ajustar padding */
+.hl-c-cont.no-avatar {
+  padding: 24px 32px 24px 32px !important;
+}
+.hl-c-cont.no-avatar .hl-name,
+.hl-c-cont.no-avatar .hl-message {
+  margin-left: 0 !important;
+}
