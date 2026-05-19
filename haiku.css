@@ -65,19 +65,7 @@ body { background-color: transparent !important; }
   font-family: 'Inter', 'DM Sans', sans-serif !important;
 }
 
-/* Línea estructural verde en el lado izquierdo (acento interno) */
-.hl-c-cont.highlight-chat::before,
-.highlighted-comment::before {
-  content: "";
-  position: absolute;
-  left: 14px;
-  top: 22px;
-  bottom: 22px;
-  width: 2px;
-  background: var(--hk-verde);
-  border-radius: 2px;
-  opacity: 0.45;
-}
+/* (eliminada la línea verde vertical interna por petición del usuario) */
 
 /* ============================================================
    NOMBRE — forzar dentro del card, con mark editorial
@@ -106,15 +94,14 @@ body { background-color: transparent !important; }
   z-index: 2 !important;
 }
 
-/* Marca editorial "→" antes del nombre, en verde */
+/* Marca editorial leaf (Lucide) antes del nombre, en verde */
 .hl-name::before {
-  content: "→";
-  color: var(--hk-verde);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0;
+  content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2300A86B' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'/><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'/></svg>");
   display: inline-block;
-  transform: translateY(-1px);
+  width: 14px;
+  height: 14px;
+  line-height: 0;
+  transform: translateY(1px);
 }
 
 /* ============================================================
@@ -193,27 +180,16 @@ body { background-color: transparent !important; }
 }
 
 /* ============================================================
-   VARIANTE — donación / superchat
+   VARIANTE — donación / superchat (acento verde más presente)
    ============================================================ */
-.hl-c-cont.dono::before {
-  background: var(--hk-verde);
-  opacity: 0.9;
-  width: 3px;
-}
 .hl-c-cont.dono .hl-name { color: var(--hk-verde) !important; }
-.hl-c-cont.dono .hl-name::before {
-  content: "◆";
-  font-size: 9px;
-}
+.hl-c-cont.dono { border-color: rgba(0, 168, 107, 0.25) !important; }
 
 /* ============================================================
    SIN AVATAR — padding ajustado
    ============================================================ */
 .hl-c-cont.no-avatar {
   padding: 22px 28px 22px 32px !important;
-}
-.hl-c-cont.no-avatar::before {
-  left: 18px;
 }
 
 /* ============================================================
