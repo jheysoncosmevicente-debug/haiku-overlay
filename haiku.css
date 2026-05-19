@@ -32,7 +32,10 @@
   --font-family: 'Inter', 'DM Sans', sans-serif;
 }
 
-body { background-color: transparent !important; }
+html, body {
+  background: transparent !important;
+  background-color: transparent !important;
+}
 
 /* ============================================================
    CONTENEDOR EXTERNO
@@ -41,7 +44,17 @@ body { background-color: transparent !important; }
   margin: 0 0 0 56px !important;
   bottom: 56px !important;
   max-width: 780px !important;
+  min-height: 0 !important;
+  background: transparent !important;
 }
+
+/* Ocultar cards vacíos (sin .hl-message con contenido) */
+.hl-c-cont:not(:has(.hl-message:not(:empty))) {
+  display: none !important;
+}
+
+/* Ocultar el botón clear genérico de SSN si aparece */
+.btn-clear { display: none !important; }
 
 /* ============================================================
    TARJETA — usamos .hl-c-cont como el CARD VISIBLE
