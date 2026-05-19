@@ -12,17 +12,18 @@
   --hk-azul:     #014751;
   --hk-negro:    #0a0a0a;
   --hk-hueso:    #F5F7F2;
-  --hk-gris:     rgba(245, 247, 242, 0.55);
-  --hk-hairline: rgba(245, 247, 242, 0.10);
+  --hk-tinta:    #0a0a0a;
+  --hk-tinta-2:  rgba(10, 10, 10, 0.62);
+  --hk-hairline: rgba(10, 10, 10, 0.10);
 
   /* Variables SSN — desactivar defaults */
-  --comment-color: var(--hk-hueso);
+  --comment-color: var(--hk-tinta);
   --comment-bg-color: transparent;
   --comment-border-radius: 0;
   --comment-padding: 0;
   --comment-font-size: 20px;
   --comment-font-weight: 500;
-  --author-color: var(--hk-hueso);
+  --author-color: var(--hk-tinta);
   --author-bg-color: transparent;
   --author-font-size: 11px;
   --author-font-weight: 600;
@@ -49,16 +50,16 @@ body { background-color: transparent !important; }
 .hl-c-cont.highlight-chat,
 .highlighted-comment {
   position: relative !important;
-  background: rgba(10, 10, 10, 0.92) !important;
-  backdrop-filter: blur(24px) saturate(130%);
-  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  background: rgba(245, 247, 242, 0.96) !important;
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
   border-radius: 20px !important;
   border: 1px solid var(--hk-hairline) !important;
   max-width: 720px !important;
   min-height: 90px !important;
   padding: 22px 28px 22px 96px !important;
   margin-top: 14px !important;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 18px 50px rgba(1, 71, 81, 0.18), 0 2px 6px rgba(0,0,0,0.08) !important;
   animation: haikuEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: visible !important;
   font-family: 'Inter', 'DM Sans', sans-serif !important;
@@ -89,15 +90,14 @@ body { background-color: transparent !important; }
   font-family: 'Inter', sans-serif !important;
   font-weight: 600 !important;
   font-size: 10.5px !important;
-  color: var(--hk-hueso) !important;
+  color: var(--hk-tinta) !important;
   text-transform: uppercase !important;
   letter-spacing: 2.4px !important;
   background: transparent !important;
-  padding: 0 !important;
+  padding: 0 0 8px 0 !important;
   margin: 0 0 10px 0 !important;
   border-radius: 0 !important;
   border-bottom: 1px solid var(--hk-hairline) !important;
-  padding-bottom: 8px !important;
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
@@ -127,7 +127,7 @@ body { background-color: transparent !important; }
   font-style: normal !important;
   font-size: 21px !important;
   line-height: 1.42 !important;
-  color: var(--hk-hueso) !important;
+  color: var(--hk-tinta) !important;
   letter-spacing: -0.15px !important;
   background: transparent !important;
   background-color: transparent !important;
@@ -150,9 +150,9 @@ body { background-color: transparent !important; }
   top: 50% !important;
   transform: translateY(-50%) !important;
   border-radius: 50% !important;
-  border: 1px solid var(--hk-hairline) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-  background: linear-gradient(135deg, var(--hk-azul), var(--hk-verde-dim)) !important;
+  border: 2px solid var(--hk-verde) !important;
+  box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.10) !important;
+  background: linear-gradient(135deg, var(--hk-azul), var(--hk-verde)) !important;
   overflow: hidden !important;
   z-index: 3 !important;
 }
@@ -177,7 +177,7 @@ body { background-color: transparent !important; }
 
 .sourcetype {
   position: absolute !important;
-  bottom: 6px !important;
+  bottom: 8px !important;
   left: 64px !important;
   top: auto !important;
   width: 22px !important;
@@ -185,9 +185,10 @@ body { background-color: transparent !important; }
   max-width: 22px !important;
   max-height: 22px !important;
   border-radius: 50% !important;
-  background: var(--hk-negro) !important;
+  background: var(--hk-hueso) !important;
   padding: 4px !important;
   border: 1px solid var(--hk-hairline) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
   z-index: 5 !important;
 }
 
